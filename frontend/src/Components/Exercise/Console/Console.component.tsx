@@ -1,10 +1,15 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 
 import { Props } from "./Console.types";
 import styles from "./Console.module.scss";
 import classnames from "classnames";
 
 const Console = ({ onGoClick, exerciceTestsLogs, allTestsAreValid }: Props) => {
+  const consoleEndRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    consoleEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [exerciceTestsLogs]);
+
   return (
     <div className={styles.container}>
       <button className={styles.goButton} onClick={onGoClick}>
@@ -31,11 +36,15 @@ const Console = ({ onGoClick, exerciceTestsLogs, allTestsAreValid }: Props) => {
           </>
         ))}
 
-        <p style={{ display: allTestsAreValid ? "block" : "none" }}>
+        <p
+          className={styles.success}
+          style={{ display: allTestsAreValid ? "block" : "none" }}
+        >
           SUCCESS! All tests passed. You've used 0:04 so far. Well done!
           <br />
           Click Go or hit Ctrl-Enter/⌘-Enter to move on to level 2!
         </p>
+        <div ref={consoleEndRef} />
       </div>
     </div>
   );

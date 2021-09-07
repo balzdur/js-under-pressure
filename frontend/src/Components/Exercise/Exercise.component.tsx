@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useReducer } from "react";
 import AceEditor from "react-ace";
 
 import "ace-builds/src-noconflict/mode-javascript";
@@ -9,6 +9,11 @@ import styles from "./Exercise.module.scss";
 import { youCantJSUnderPressure } from "../../assets";
 import { Console } from "./Console";
 import useMultiKeyPress from "../../Hooks/useMultiKeyPress";
+import {
+  ExerciceTestsLogs,
+  ExerciseTest,
+  ExerciseTestService,
+} from "../../Services";
 
 function areKeysPressed(keys: string[], keysPressed: string[]): boolean {
   for (var elem of keys) {
@@ -17,10 +22,59 @@ function areKeysPressed(keys: string[], keysPressed: string[]): boolean {
   return true;
 }
 
-const Exercise = ({ exercise }: Props) => {
-  const [code, setCode] = useState(exercise.baseCode);
+interface ExerciseState {
+  code: string;
+  tests: ExerciseTest[];
+  exerciceTestsLogs: ExerciceTestsLogs[];
+  allTestsPassed: boolean;
+}
 
-  function onGoClick() {}
+type ExerciseActions =
+  | {
+      type: "GO";
+      payload: {};
+    }
+  | {
+      type: "SET_CODE";
+      payload: { code: string };
+    };
+
+function reducer(state: ExerciseState, action: ExerciseActions) {
+  switch (action.type) {
+    case "GO":
+      const { computedExerciceTests, allTestsPassed } =
+        ExerciseTestService.computeExerciseTests(state.tests, state.code);
+
+      return {
+        ...state,
+        exerciceTestsLogs: [
+          ...state.exerciceTestsLogs,
+          ...ExerciseTestService.logExerciseTestsResults(computedExerciceTests),
+        ],
+        allTestsPassed,
+      };
+    case "SET_CODE":
+      return {
+        ...state,
+        code: action.payload.code,
+      };
+  }
+}
+
+const Exercise = ({ exercise: { baseCode, tests } }: Props) => {
+  const [{ code, exerciceTestsLogs, allTestsPassed }, dispatch] = useReducer(
+    reducer,
+    {
+      code: baseCode,
+      tests,
+      exerciceTestsLogs: [],
+      allTestsPassed: false,
+    }
+  );
+
+  const onGoClick = useCallback(() => {
+    dispatch({ type: "GO", payload: {} });
+  }, []);
 
   const keysPressed = useMultiKeyPress();
   useEffect(() => {
@@ -30,7 +84,7 @@ const Exercise = ({ exercise }: Props) => {
     ) {
       onGoClick();
     }
-  }, [keysPressed]);
+  }, [keysPressed, onGoClick]);
 
   return (
     <div className={styles.container}>
@@ -46,23 +100,14 @@ const Exercise = ({ exercise }: Props) => {
           enableLiveAutocompletion: true,
         }}
         value={code}
-        onChange={setCode}
+        onChange={(newCode) => {
+          dispatch({ type: "SET_CODE", payload: { code: newCode } });
+        }}
       />
       <Console
         onGoClick={onGoClick}
-        exerciceTestsLogs={[
-          {
-            testTitle: 'Testing "isNumberEven(2);"...',
-            testPassed: false,
-            testResult: "WRONG: Got undefined but expected true. Try again!",
-          },
-          {
-            testTitle: 'Testing "isNumberEven(2);"...',
-            testPassed: true,
-            testResult: "WRONG: Got undefined but expected true. Try again!",
-          },
-        ]}
-        allTestsAreValid={false}
+        exerciceTestsLogs={exerciceTestsLogs}
+        allTestsAreValid={allTestsPassed}
       />
     </div>
   );

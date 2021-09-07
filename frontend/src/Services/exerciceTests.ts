@@ -11,17 +11,28 @@ interface ComputedExerciceTest extends ExerciseTest {
 function computeExerciseTests(
   tests: ExerciseTest[],
   code: string
-): ComputedExerciceTest[] {
-  return tests.reduce<ComputedExerciceTest[]>((acc, { call, result }) => {
-    if (acc.length > 0 && acc[acc.length - 1].testPassed === false) return acc;
+): { computedExerciceTests: ComputedExerciceTest[]; allTestsPassed: boolean } {
+  const computedExerciceTests = tests.reduce<ComputedExerciceTest[]>(
+    (acc, { call, result }) => {
+      if (acc.length > 0 && acc[acc.length - 1].testPassed === false)
+        return acc;
 
-    const computedResult = eval(`${code};${call}`);
+      const computedResult = eval(`${code};${call}`);
 
-    return [
-      ...acc,
-      { call, computedResult, result, testPassed: computedResult === result },
-    ];
-  }, []);
+      return [
+        ...acc,
+        { call, computedResult, result, testPassed: computedResult === result },
+      ];
+    },
+    []
+  );
+
+  return {
+    computedExerciceTests,
+    allTestsPassed:
+      computedExerciceTests.length === tests.length &&
+      computedExerciceTests[computedExerciceTests.length - 1].testPassed,
+  };
 }
 
 export interface ExerciceTestsLogs {
