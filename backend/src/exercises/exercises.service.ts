@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import getExerciseSet, { Exercise } from './exercises/exerciseSet';
+import getExerciseSet, { Exercise } from './exerciseSet';
 
 @Injectable()
 export class ExercisesService {
-  async getExercises(): Promise<Exercise[]> {
+  findAll(): Promise<Exercise[]> {
     return getExerciseSet();
   }
 }

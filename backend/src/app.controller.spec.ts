@@ -15,10 +15,8 @@ describe('AppController', () => {
   });
 
   describe('root', () => {
-    it('should return "Hello World!"', async () => {
-      const exercises = await appController.getExercises();
-      expect(exercises).toBeDefined();
-      expect(exercises.length).toBe(5);
+    it('should return "Server up and running"', () => {
+      expect(appController.getHealthcheck()).toBe('Server up and running');
     });
   });
 });

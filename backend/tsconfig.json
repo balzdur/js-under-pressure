@@ -17,19 +17,6 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
-    "paths": {
-      "@app/my-library": [
-        "libs/my-library/src"
-      ],
-      "@app/my-library/*": [
-        "libs/my-library/src/*"
-      ],
-      "@app/exercises": [
-        "libs/exercises/src"
-      ],
-      "@app/exercises/*": [
-        "libs/exercises/src/*"
-      ]
-    }
+    "paths": {}
   }
 }
