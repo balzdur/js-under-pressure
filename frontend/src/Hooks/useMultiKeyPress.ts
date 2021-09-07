@@ -14,7 +14,7 @@ function reducer(
   }
 }
 
-export default function useMultiKeyPress() {
+export function useMultiKeyPress() {
   const [keysPressed, dispatch] = useReducer(reducer, []);
 
   function downHandler({ key }: { key: string }) {
