@@ -1,0 +1,32 @@
+{
+  "folders": [
+    {
+      "name": "ROOT",
+      "path": "."
+    },
+    {
+      "path": "backend"
+    },
+    {
+      "path": "frontend"
+    }
+  ],
+  "settings": {
+    // prettier
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+
+    // eslint
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+    },
+
+    //TS
+    "typescript.tsdk": "ROOT/node_modules/typescript/lib",
+
+    "files.exclude": {
+      "frontend": true,
+      "backend": true
+    }
+  }
+}
