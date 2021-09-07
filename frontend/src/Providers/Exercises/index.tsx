@@ -1,16 +1,9 @@
 import { useHistory } from "react-router-dom";
+import { StopwatchResult } from "react-timer-hook";
 import React, { createContext, useCallback } from "react";
-import { ExerciseState, useExercisesReducer } from "../../Hooks";
+import { useExercisesReducer } from "../../Hooks";
 import { Exercise } from "../../Services";
 import { ExerciseContext } from "./types";
-
-const initialState: ExerciseState = {
-  currentExerciseIndex: 0,
-  code: "",
-  exercises: [],
-  exerciceTestsLogs: [],
-  allTestsPassed: false,
-};
 
 const ExercisesContext = createContext<ExerciseContext>({
   currentLevel: 0,
@@ -35,23 +28,26 @@ function ExercisesProvider(props: React.PropsWithChildren<{}>) {
       exercises,
     },
     dispatch,
-  ] = useExercisesReducer(initialState);
+  ] = useExercisesReducer({
+    currentExerciseIndex: 0,
+    code: "",
+    exercises: [],
+    exerciceTestsLogs: [],
+    allTestsPassed: false,
+  });
 
-  const onGoClick = useCallback(() => {
-    if (!allTestsPassed) {
-      return dispatch({ type: "GO", payload: {} });
-    }
-    if (currentExerciseIndex === exercises.length - 1) {
-      return history.push("/success");
-    }
-    dispatch({ type: "NEXT_EXERCISE", payload: {} });
-  }, [
-    allTestsPassed,
-    currentExerciseIndex,
-    dispatch,
-    exercises.length,
-    history,
-  ]);
+  const onGoClick = useCallback(
+    (watch?: StopwatchResult) => {
+      if (!allTestsPassed) {
+        return dispatch({ type: "GO", payload: { watch } });
+      }
+      if (currentExerciseIndex === exercises.length - 1) {
+        return history.push("/success");
+      }
+      dispatch({ type: "NEXT_EXERCISE", payload: {} });
+    },
+    [allTestsPassed, currentExerciseIndex, dispatch, exercises.length, history]
+  );
 
   const onCodeChange = useCallback(
     (newCode: string) => {

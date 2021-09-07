@@ -1,4 +1,5 @@
 import { ExerciceTestsLogs, Exercise } from "../../Services";
+import { StopwatchResult } from "react-timer-hook";
 
 export interface ExerciseContext {
   currentLevel: number;
@@ -6,7 +7,7 @@ export interface ExerciseContext {
   exercises: Exercise[];
   exerciceTestsLogs: ExerciceTestsLogs[];
   allTestsPassed: boolean;
-  onGoClick: () => void;
+  onGoClick: (watch?: StopwatchResult) => void;
   onCodeChange: (code: string) => void;
   setExercises: (exercises: Exercise[]) => void;
 }

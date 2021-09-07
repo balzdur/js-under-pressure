@@ -1,5 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import AceEditor from "react-ace";
+import { StopwatchResult } from "react-timer-hook";
 
 import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/theme-github";
@@ -11,6 +12,7 @@ import { Console } from "./Console";
 import { useMultiKeyPress } from "../../Hooks";
 import { useExercisesState } from "../../Providers/Exercises";
 import { useHistory } from "react-router-dom";
+import { Counter } from "./Counter";
 
 function areKeysPressed(keys: string[], keysPressed: string[]): boolean {
   for (var elem of keys) {
@@ -20,7 +22,21 @@ function areKeysPressed(keys: string[], keysPressed: string[]): boolean {
 }
 
 const Exercise = (_: Props) => {
-  const { code, onCodeChange, onGoClick, exercises } = useExercisesState();
+  const {
+    code,
+    onCodeChange,
+    onGoClick,
+    exercises,
+    exerciceTestsLogs,
+    allTestsPassed,
+    currentLevel,
+  } = useExercisesState();
+
+  const watchRef = useRef<StopwatchResult>();
+
+  const onGoClickWithWatch = useCallback(() => {
+    onGoClick(watchRef.current);
+  }, [onGoClick]);
 
   const history = useHistory();
   useEffect(() => {
@@ -36,13 +52,19 @@ const Exercise = (_: Props) => {
       areKeysPressed(["Meta", "Enter"], keysPressed) ||
       areKeysPressed(["Control", "Enter"], keysPressed)
     ) {
-      onGoClick();
+      onGoClickWithWatch();
     }
-  }, [keysPressed, onGoClick]);
+  }, [keysPressed, onGoClickWithWatch]);
 
   return (
     <div className={styles.container}>
-      <img src={youCantJSUnderPressure.src} alt={youCantJSUnderPressure.alt} />
+      <div className={styles.topContainer}>
+        <img
+          src={youCantJSUnderPressure.src}
+          alt={youCantJSUnderPressure.alt}
+        />
+        {/* <Counter watchRef={watchRef} /> */}
+      </div>
       <AceEditor
         className={styles.editor}
         width="100%"
@@ -56,7 +78,12 @@ const Exercise = (_: Props) => {
         value={code}
         onChange={onCodeChange}
       />
-      <Console />
+      <Console
+        exerciceTestsLogs={exerciceTestsLogs}
+        allTestsPassed={allTestsPassed}
+        currentLevel={currentLevel}
+        onGoClick={onGoClickWithWatch}
+      />
     </div>
   );
 };

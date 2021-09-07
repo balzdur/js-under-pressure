@@ -3,12 +3,13 @@ import React, { useEffect, useRef } from "react";
 import { Props } from "./Console.types";
 import styles from "./Console.module.scss";
 import classnames from "classnames";
-import { useExercisesState } from "../../../Providers/Exercises";
 
-const Console = (_: Props) => {
-  const { exerciceTestsLogs, allTestsPassed, onGoClick, currentLevel } =
-    useExercisesState();
-
+const Console = ({
+  exerciceTestsLogs,
+  allTestsPassed,
+  onGoClick,
+  currentLevel,
+}: Props) => {
   const consoleEndRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     consoleEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -16,7 +17,12 @@ const Console = (_: Props) => {
 
   return (
     <div className={styles.container}>
-      <button className={styles.goButton} onClick={onGoClick}>
+      <button
+        className={styles.goButton}
+        onClick={() => {
+          onGoClick();
+        }}
+      >
         Go
       </button>
       <div className={styles.consoleContainer}>
