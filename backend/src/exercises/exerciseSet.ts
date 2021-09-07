@@ -30,7 +30,7 @@ export default async function (): Promise<Exercise[]> {
       baseCode: (await readFile(baseCodeFolder + 'test1.js')).toString(),
       solution: (await readFile(solutionFolder + 'test1.js')).toString(),
       tests: [
-        { call: 'doubleInteger(2)', result: 2 },
+        { call: 'doubleInteger(2)', result: 4 },
         { call: 'doubleInteger(4)', result: 8 },
         { call: 'doubleInteger(-10)', result: -20 },
         { call: 'doubleInteger(0)', result: 0 },
