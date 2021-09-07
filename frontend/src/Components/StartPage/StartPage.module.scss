@@ -1,0 +1,29 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+img {
+  width: 50%;
+  min-width: 600px;
+}
+
+h2 {
+  margin: 50px;
+  font-size: 50px;
+  margin: 5vmin;
+  font-size: 5vmin;
+  text-align: center;
+}
+
+button {
+  display: block;
+  width: 80%;
+  font-size: 30px;
+  font-size: 8vmin;
+  padding: 20px;
+  padding: 2vmin;
+  margin-left: 10%;
+}
