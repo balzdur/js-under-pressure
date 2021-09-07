@@ -12,8 +12,10 @@
   align-items: center;
 
   img {
-    object-fit: scale-down;
-    height: 100%;
+    display: flex;
+    object-fit: contain;
+    max-height: 10rem;
+    max-width: 10rem;
   }
 }
 

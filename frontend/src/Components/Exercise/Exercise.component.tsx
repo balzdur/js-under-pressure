@@ -1,6 +1,5 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect } from "react";
 import AceEditor from "react-ace";
-import { StopwatchResult } from "react-timer-hook";
 
 import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/theme-github";
@@ -32,10 +31,8 @@ const Exercise = (_: Props) => {
     currentLevel,
   } = useExercisesState();
 
-  const watchRef = useRef<StopwatchResult>();
-
   const onGoClickWithWatch = useCallback(() => {
-    onGoClick(watchRef.current);
+    onGoClick();
   }, [onGoClick]);
 
   const history = useHistory();
@@ -63,7 +60,7 @@ const Exercise = (_: Props) => {
           src={youCantJSUnderPressure.src}
           alt={youCantJSUnderPressure.alt}
         />
-        {/* <Counter watchRef={watchRef} /> */}
+        <Counter />
       </div>
       <AceEditor
         className={styles.editor}
@@ -71,10 +68,6 @@ const Exercise = (_: Props) => {
         fontSize="3vmin"
         mode="javascript"
         theme="github"
-        setOptions={{
-          enableBasicAutocompletion: true,
-          enableLiveAutocompletion: true,
-        }}
         value={code}
         onChange={onCodeChange}
       />

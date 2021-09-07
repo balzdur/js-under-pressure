@@ -1,5 +1,4 @@
 import { useReducer } from "react";
-import { StopwatchResult } from "react-timer-hook";
 import { ExerciceTestsLogs, Exercise, ExerciseTestService } from "../Services";
 
 export interface ExerciseState {
@@ -17,7 +16,7 @@ export type ExerciseActions =
     }
   | {
       type: "GO";
-      payload: { watch?: StopwatchResult };
+      payload: {};
     }
   | {
       type: "SET_CODE";
@@ -48,8 +47,6 @@ function reducer(state: ExerciseState, action: ExerciseActions) {
         ...resetStateToExercise(exercises, currentExerciseIndex + 1),
       };
     case "GO":
-      const { watch } = action.payload;
-      watch?.pause();
       const { tests } = exercises[currentExerciseIndex];
       const { computedExerciceTests, allTestsPassed } =
         ExerciseTestService.computeExerciseTests(tests, code);
@@ -63,7 +60,6 @@ function reducer(state: ExerciseState, action: ExerciseActions) {
         allTestsPassed,
       };
 
-      watch?.start();
       return newState;
     case "SET_CODE":
       return {

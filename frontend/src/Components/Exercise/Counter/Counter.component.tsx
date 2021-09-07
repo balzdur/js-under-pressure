@@ -1,15 +1,14 @@
 import React, { useEffect } from "react";
 
-import { useStopwatch } from "react-timer-hook";
 import { Props } from "./Counter.types";
 import styles from "./Counter.module.scss";
+import { useCounterContext } from "../../../Providers/Counter";
 
-const Counter = ({ watchRef }: Props) => {
-  const watch = useStopwatch({ autoStart: false });
+const Counter = (_: Props) => {
+  const { watch } = useCounterContext();
 
   useEffect(() => {
     if (watch) {
-      watchRef.current = watch;
       watch.start();
     }
     return () => {
@@ -17,7 +16,8 @@ const Counter = ({ watchRef }: Props) => {
         watch.pause();
       }
     };
-  }, [watchRef]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <p className={styles.counter}>{`${watch?.minutes}:${watch?.seconds}`}</p>

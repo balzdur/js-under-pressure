@@ -1,5 +1,4 @@
 import { useHistory } from "react-router-dom";
-import { StopwatchResult } from "react-timer-hook";
 import React, { createContext, useCallback } from "react";
 import { useExercisesReducer } from "../../Hooks";
 import { Exercise } from "../../Services";
@@ -36,18 +35,21 @@ function ExercisesProvider(props: React.PropsWithChildren<{}>) {
     allTestsPassed: false,
   });
 
-  const onGoClick = useCallback(
-    (watch?: StopwatchResult) => {
-      if (!allTestsPassed) {
-        return dispatch({ type: "GO", payload: { watch } });
-      }
-      if (currentExerciseIndex === exercises.length - 1) {
-        return history.push("/success");
-      }
-      dispatch({ type: "NEXT_EXERCISE", payload: {} });
-    },
-    [allTestsPassed, currentExerciseIndex, dispatch, exercises.length, history]
-  );
+  const onGoClick = useCallback(() => {
+    if (!allTestsPassed) {
+      return dispatch({ type: "GO", payload: {} });
+    }
+    if (currentExerciseIndex === exercises.length - 1) {
+      return history.push("/success");
+    }
+    dispatch({ type: "NEXT_EXERCISE", payload: {} });
+  }, [
+    allTestsPassed,
+    currentExerciseIndex,
+    dispatch,
+    exercises.length,
+    history,
+  ]);
 
   const onCodeChange = useCallback(
     (newCode: string) => {

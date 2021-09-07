@@ -4,28 +4,27 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-}
 
-img {
-  width: 50%;
-  min-width: 600px;
-}
+  img {
+    width: 50%;
+  }
 
-h2 {
-  margin: 50px;
-  font-size: 50px;
-  margin: 5vmin;
-  font-size: 5vmin;
-  text-align: center;
-}
+  h2 {
+    margin: 50px;
+    font-size: 50px;
+    margin: 5vmin;
+    font-size: 5vmin;
+    text-align: center;
+  }
 
-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 80%;
-  height: 5rem;
-  font-size: 3rem;
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+    height: 8rem;
+    font-size: 3rem;
+  }
 }
 
 .loader {
