@@ -1,4 +1,4 @@
-import { ExerciseTest } from "../../Services/computeSolution";
+import { ExerciseTest } from "../../Services/exerciceTests";
 
 export interface Exercise {
   name: string;

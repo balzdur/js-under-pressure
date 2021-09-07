@@ -48,7 +48,22 @@ const Exercise = ({ exercise }: Props) => {
         value={code}
         onChange={setCode}
       />
-      <Console onGoClick={onGoClick} />
+      <Console
+        onGoClick={onGoClick}
+        exerciceTestsLogs={[
+          {
+            testTitle: 'Testing "isNumberEven(2);"...',
+            testPassed: false,
+            testResult: "WRONG: Got undefined but expected true. Try again!",
+          },
+          {
+            testTitle: 'Testing "isNumberEven(2);"...',
+            testPassed: true,
+            testResult: "WRONG: Got undefined but expected true. Try again!",
+          },
+        ]}
+        allTestsAreValid={false}
+      />
     </div>
   );
 };

@@ -1,3 +1,7 @@
+p {
+  margin: initial;
+}
+
 .container {
   display: flex;
   flex: 1;
@@ -25,7 +29,22 @@
   overflow-x: hidden;
   background-color: #fff;
 
-  div:first-child {
+  p:first-child {
     background-color: #cfc;
   }
+
+  p:last-child {
+    display: none;
+    background-color: #b8860b;
+    color: #fff;
+  }
+}
+
+.validTest {
+  background-color: #cfc;
+}
+
+.unValidTest {
+  background-color: #cc0000;
+  color: #fff;
 }
