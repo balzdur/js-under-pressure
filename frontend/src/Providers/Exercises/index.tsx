@@ -1,50 +1,57 @@
+import { useHistory } from "react-router-dom";
 import React, { createContext, useCallback } from "react";
 import { ExerciseState, useExercisesReducer } from "../../Hooks";
-
-const exercise = {
-  name: "Double integer",
-  description: "Double the number and return the result.",
-  baseCode:
-    "function doubleInteger(x) {\n        // `x` will be an integer. Double it and return it.\n              return x;\n      }      ",
-  solution: "solution",
-  tests: [
-    { call: "doubleInteger(2)", result: 4 },
-    { call: "doubleInteger(4)", result: 8 },
-    { call: "doubleInteger(-10)", result: -20 },
-    { call: "doubleInteger(0)", result: 0 },
-    { call: "doubleInteger(100)", result: 200 },
-  ],
-};
+import { Exercise } from "../../Services";
+import { ExerciseContext } from "./types";
 
 const initialState: ExerciseState = {
-  level: 1,
-  code: exercise.baseCode,
-  tests: exercise.tests,
+  currentExerciseIndex: 0,
+  code: "",
+  exercises: [],
   exerciceTestsLogs: [],
   allTestsPassed: false,
 };
 
-interface ExercisesState extends Omit<ExerciseState, "tests"> {
-  onGoClick: () => void;
-  onCodeChange: (code: string) => void;
-}
-
-const ExercisesContext = createContext<ExercisesState>({
-  level: 0,
+const ExercisesContext = createContext<ExerciseContext>({
+  currentLevel: 0,
   code: "",
+  exercises: [],
   exerciceTestsLogs: [],
   allTestsPassed: false,
   onGoClick: () => {},
   onCodeChange: () => {},
+  setExercises: () => {},
 });
 
 function ExercisesProvider(props: React.PropsWithChildren<{}>) {
-  const [{ code, level, exerciceTestsLogs, allTestsPassed }, dispatch] =
-    useExercisesReducer(initialState);
+  const history = useHistory();
+
+  const [
+    {
+      currentExerciseIndex,
+      code,
+      exerciceTestsLogs,
+      allTestsPassed,
+      exercises,
+    },
+    dispatch,
+  ] = useExercisesReducer(initialState);
 
   const onGoClick = useCallback(() => {
-    dispatch({ type: "GO", payload: {} });
-  }, [dispatch]);
+    if (!allTestsPassed) {
+      return dispatch({ type: "GO", payload: {} });
+    }
+    if (currentExerciseIndex === exercises.length - 1) {
+      return history.push("/success");
+    }
+    dispatch({ type: "NEXT_EXERCISE", payload: {} });
+  }, [
+    allTestsPassed,
+    currentExerciseIndex,
+    dispatch,
+    exercises.length,
+    history,
+  ]);
 
   const onCodeChange = useCallback(
     (newCode: string) => {
@@ -53,15 +60,24 @@ function ExercisesProvider(props: React.PropsWithChildren<{}>) {
     [dispatch]
   );
 
+  const setExercises = useCallback(
+    (exercises: Exercise[]) => {
+      dispatch({ type: "SET_EXERCISES", payload: { exercises } });
+    },
+    [dispatch]
+  );
+
   return (
     <ExercisesContext.Provider
       value={{
+        currentLevel: currentExerciseIndex + 1,
         code,
-        level,
         exerciceTestsLogs,
         allTestsPassed,
+        exercises,
         onGoClick,
         onCodeChange,
+        setExercises,
       }}
     >
       {props.children}
@@ -69,14 +85,14 @@ function ExercisesProvider(props: React.PropsWithChildren<{}>) {
   );
 }
 
-function useExercisesState() {
+function useExercisesContext() {
   const exercisesState = React.useContext(ExercisesContext);
   if (typeof exercisesState === "undefined") {
     throw new Error(
-      "useExercisesState must be used within a ExercisesProvider"
+      "useExercisesState must be used within an ExercisesProvider"
     );
   }
   return exercisesState;
 }
 
-export { ExercisesProvider, useExercisesState };
+export { ExercisesProvider, useExercisesContext as useExercisesState };

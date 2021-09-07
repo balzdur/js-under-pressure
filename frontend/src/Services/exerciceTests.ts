@@ -3,9 +3,18 @@ export interface ExerciseTest {
   result: any;
 }
 
+export interface Exercise {
+  name: string;
+  description?: string;
+  baseCode: string;
+  solution: string;
+  tests: ExerciseTest[];
+}
+
 interface ComputedExerciceTest extends ExerciseTest {
   testPassed: boolean;
-  computedResult: any;
+  computedResult?: any;
+  error?: any;
 }
 
 function computeExerciseTests(
@@ -17,7 +26,21 @@ function computeExerciseTests(
       if (acc.length > 0 && acc[acc.length - 1].testPassed === false)
         return acc;
 
-      const computedResult = eval(`${code};${call}`);
+      let computedResult;
+      try {
+        computedResult = eval(`${code}; ${call}`);
+      } catch (error) {
+        return [
+          ...acc,
+          {
+            call,
+            computedResult,
+            error,
+            result,
+            testPassed: false,
+          },
+        ];
+      }
 
       return [
         ...acc,
@@ -45,11 +68,13 @@ function logExerciseTestsResults(
   computedExerciceTests: ComputedExerciceTest[]
 ): ExerciceTestsLogs[] {
   return computedExerciceTests.map(
-    ({ testPassed, computedResult, call, result }) => ({
+    ({ testPassed, computedResult, call, result, error }) => ({
       testTitle: `Testing "${call};"...`,
       testPassed,
       testResult: testPassed
         ? `RIGHT: ${computedResult} is the right answer.`
+        : error
+        ? `ERROR: ${error?.message ?? error}`
         : `WRONG: Got ${computedResult} but expected ${result}. Try again!`,
     })
   );

@@ -1,15 +1,16 @@
 import React from "react";
+import { Switch, Route } from "react-router-dom";
 import "./App.css";
 import { Exercise } from "./Components/Exercise";
 import { StartPage } from "./Components/StartPage";
-import { useExercisesState } from "./Providers/Exercises";
 
 function App() {
   return (
     <div className="App">
-      {/* <StartPage onClick={() => {}} /> */}
-
-      <Exercise />
+      <Switch>
+        <Route path="/exercises" component={Exercise} />
+        <Route path="" component={StartPage} />
+      </Switch>
     </div>
   );
 }

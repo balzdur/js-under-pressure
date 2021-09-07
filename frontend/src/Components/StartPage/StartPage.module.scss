@@ -1,5 +1,6 @@
 .container {
   display: flex;
+  flex: 1;
   justify-content: center;
   align-items: center;
   flex-direction: column;
@@ -19,11 +20,28 @@ h2 {
 }
 
 button {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 80%;
-  font-size: 30px;
-  font-size: 8vmin;
-  padding: 20px;
-  padding: 2vmin;
-  margin-left: 10%;
+  height: 5rem;
+  font-size: 3rem;
+}
+
+.loader {
+  border: 8px solid #f3f3f3; /* Light grey */
+  border-top: 8px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

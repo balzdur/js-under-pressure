@@ -10,6 +10,7 @@ import { youCantJSUnderPressure } from "../../assets";
 import { Console } from "./Console";
 import { useMultiKeyPress } from "../../Hooks";
 import { useExercisesState } from "../../Providers/Exercises";
+import { useHistory } from "react-router-dom";
 
 function areKeysPressed(keys: string[], keysPressed: string[]): boolean {
   for (var elem of keys) {
@@ -19,7 +20,15 @@ function areKeysPressed(keys: string[], keysPressed: string[]): boolean {
 }
 
 const Exercise = (_: Props) => {
-  const { code, onCodeChange, onGoClick } = useExercisesState();
+  const { code, onCodeChange, onGoClick, exercises } = useExercisesState();
+
+  const history = useHistory();
+  useEffect(() => {
+    if (!exercises || exercises.length === 0) {
+      history.replace("/");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const keysPressed = useMultiKeyPress();
   useEffect(() => {

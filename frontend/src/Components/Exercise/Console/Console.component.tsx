@@ -6,7 +6,7 @@ import classnames from "classnames";
 import { useExercisesState } from "../../../Providers/Exercises";
 
 const Console = (_: Props) => {
-  const { exerciceTestsLogs, allTestsPassed, onGoClick, level } =
+  const { exerciceTestsLogs, allTestsPassed, onGoClick, currentLevel } =
     useExercisesState();
 
   const consoleEndRef = useRef<HTMLDivElement>(null);
@@ -47,7 +47,7 @@ const Console = (_: Props) => {
           SUCCESS! All tests passed. You've used 0:04 so far. Well done!
           <br />
           {`Click Go or hit Ctrl-Enter/⌘-Enter to move on to level ${
-            level + 1
+            currentLevel + 1
           }!`}
         </p>
         <div ref={consoleEndRef} />
