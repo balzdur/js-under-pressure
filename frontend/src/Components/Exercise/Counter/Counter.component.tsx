@@ -4,6 +4,10 @@ import { Props } from "./Counter.types";
 import styles from "./Counter.module.scss";
 import { useCounterContext } from "../../../Providers/Counter";
 
+function format(number?: number) {
+  return number?.toString().padStart(2, "0");
+}
+
 const Counter = (_: Props) => {
   const { watch } = useCounterContext();
 
@@ -20,7 +24,9 @@ const Counter = (_: Props) => {
   }, []);
 
   return (
-    <p className={styles.counter}>{`${watch?.minutes}:${watch?.seconds}`}</p>
+    <p className={styles.counter}>{`${format(watch?.minutes)}:${format(
+      watch?.seconds
+    )}`}</p>
   );
 };
 
