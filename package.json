@@ -9,8 +9,17 @@
   "main": "index.js",
   "scripts": {
     "backend:start:dev": "yarn workspace backend start:dev",
-    "frontend:start:dev": "yarn workspace frontend start"
+    "frontend:start:dev": "yarn workspace frontend start",
+    "prepare": "husky install"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "husky": ">=6",
+    "lint-staged": ">=10",
+    "prettier": "^2.3.2"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,css,md,html}": "prettier --write"
+  }
 }
