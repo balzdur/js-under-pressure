@@ -5,10 +5,10 @@
       "path": "."
     },
     {
-      "path": "backend"
+      "path": "packages/backend"
     },
     {
-      "path": "frontend"
+      "path": "packages/frontend"
     }
   ],
   "settings": {
